@@ -2,8 +2,6 @@ package com.tyagiabhinav.dialogflowchat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,21 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initChatbot();
-    }
-
-    private void initChatbot() {
-        final AIConfiguration config = new AIConfiguration("<Client Access Token From Dialogflow>",
-                AIConfiguration.SupportedLanguages.English,
-                AIConfiguration.RecognitionEngine.System);
-
-
-        String uuid = UUID.randomUUID().toString();
-        Log.d(TAG, "initChatbot: UUID " + uuid);
-        aiDataService = new AIDataService(this, config);
-        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid);
-        aiRequest = new AIRequest();
-
         final ScrollView scrollview = findViewById(R.id.chatScrollView);
         scrollview.post(() -> scrollview.fullScroll(ScrollView.FOCUS_DOWN));
 
@@ -64,6 +47,21 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(this::sendMessage);
+
+        initChatbot();
+    }
+
+    private void initChatbot() {
+        final AIConfiguration config = new AIConfiguration("e88b7861296b467892eb5e99b7a5da69",
+                AIConfiguration.SupportedLanguages.English,
+                AIConfiguration.RecognitionEngine.System);
+        aiDataService = new AIDataService(this, config);
+
+        String uuid = UUID.randomUUID().toString();
+        Log.d(TAG, "initChatbot: UUID " + uuid);
+        aiDataService = new AIDataService(this, config);
+        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid);
+        aiRequest = new AIRequest();
     }
 
     private void sendMessage(View view) {
@@ -84,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
         if (aiResponse != null) {
             // process aiResponse here
             String botReply = aiResponse.getResult().getFulfillment().getSpeech();
-            Log.d(TAG, "Bot Reply: "+botReply);
+            Log.d(TAG, "Bot Reply: " + botReply);
             showTextView(botReply, BOT);
         } else {
-            Log.d("Bot Reply: ", "Null");
+            Log.d(TAG,"Bot Reply: Null");
             showTextView("There was some communication issue. Please Try again!", BOT);
         }
     }
