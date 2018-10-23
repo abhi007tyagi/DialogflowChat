@@ -22,6 +22,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    // Java V2
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/INDEX.LIST'
+    }
 }
 
 dependencies {
@@ -34,4 +40,8 @@ dependencies {
     // Dialogflow SDK dependencies
     implementation 'ai.api:sdk:2.0.7@aar'
     implementation 'ai.api:libai:1.6.12'
+
+    // Java V2
+    implementation 'com.google.cloud:google-cloud-dialogflow:0.67.0-alpha'
+    implementation 'io.grpc:grpc-okhttp:1.15.1' // for Remote Procedure Call to avoid "No functional channel service provider found" error while creating SessionsClient
 }

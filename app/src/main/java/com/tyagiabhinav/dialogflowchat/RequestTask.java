@@ -9,11 +9,11 @@ import ai.api.android.AIDataService;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 
-public class RequestTask extends AsyncTask<AIRequest, Void, AIResponse> {
+public class RequestTask  extends AsyncTask<AIRequest, Void, AIResponse> {
 
     Activity activity;
-    AIDataService aiDataService;
-    AIServiceContext customAIServiceContext;
+    private AIDataService aiDataService;
+    private AIServiceContext customAIServiceContext;
 
     RequestTask(Activity activity, AIDataService aiDataService, AIServiceContext customAIServiceContext){
         this.activity = activity;

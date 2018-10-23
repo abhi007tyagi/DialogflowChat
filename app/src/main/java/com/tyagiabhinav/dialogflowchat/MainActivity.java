@@ -13,6 +13,20 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2beta1.QueryInput;
+import com.google.cloud.dialogflow.v2beta1.SessionName;
+import com.google.cloud.dialogflow.v2beta1.SessionsClient;
+import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
+import com.google.cloud.dialogflow.v2beta1.TextInput;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 import ai.api.AIServiceContext;
@@ -28,11 +42,19 @@ public class MainActivity extends AppCompatActivity {
     private static final int USER = 10001;
     private static final int BOT = 10002;
 
+    private String uuid = UUID.randomUUID().toString();
+    private LinearLayout chatLayout;
+    private EditText queryEditText;
+
+    // Android client
     private AIRequest aiRequest;
     private AIDataService aiDataService;
     private AIServiceContext customAIServiceContext;
-    private LinearLayout chatLayout;
-    private EditText queryEditText;
+
+    // Java V2
+    private SessionsClient sessionsClient;
+    private SessionName session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +70,35 @@ public class MainActivity extends AppCompatActivity {
         ImageView sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(this::sendMessage);
 
-        initChatbot();
+        // Android client
+//        initChatbot();
+
+        // Java V2
+        initV2Chatbot();
     }
 
     private void initChatbot() {
-        final AIConfiguration config = new AIConfiguration("e88b7861296b467892eb5e99b7a5da69",
+        final AIConfiguration config = new AIConfiguration("<Client Access Code>",
                 AIConfiguration.SupportedLanguages.English,
                 AIConfiguration.RecognitionEngine.System);
         aiDataService = new AIDataService(this, config);
-
-        String uuid = UUID.randomUUID().toString();
-        Log.d(TAG, "initChatbot: UUID " + uuid);
-        aiDataService = new AIDataService(this, config);
-        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid);
+        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid); // helps to create new session whenever app restarts
         aiRequest = new AIRequest();
+    }
+
+    private void initV2Chatbot() {
+        try {
+            InputStream stream = getResources().openRawResource(R.raw.test_agent_credentials);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(stream);
+            String projectId = ((ServiceAccountCredentials)credentials).getProjectId();
+
+            SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
+            SessionsSettings sessionsSettings = settingsBuilder.setCredentialsProvider(FixedCredentialsProvider.create(credentials)).build();
+            sessionsClient = SessionsClient.create(sessionsSettings);
+            session = SessionName.of(projectId, uuid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendMessage(View view) {
@@ -69,12 +106,16 @@ public class MainActivity extends AppCompatActivity {
         if (msg.trim().isEmpty()) {
             Toast.makeText(MainActivity.this, "Please enter your query!", Toast.LENGTH_LONG).show();
         } else {
-            aiRequest.setQuery(msg);
-            showTextView(queryEditText.getText().toString(), USER);
+            showTextView(msg, USER);
             queryEditText.setText("");
+            // Android client
+//            aiRequest.setQuery(msg);
+//            RequestTask requestTask = new RequestTask(MainActivity.this, aiDataService, customAIServiceContext);
+//            requestTask.execute(aiRequest);
 
-            RequestTask requestTask = new RequestTask(MainActivity.this, aiDataService, customAIServiceContext);
-            requestTask.execute(aiRequest);
+            // Java V2
+            QueryInput queryInput = QueryInput.newBuilder().setText(TextInput.newBuilder().setText(msg).setLanguageCode("en-US")).build();
+            new RequestJavaV2Task(MainActivity.this, session, sessionsClient, queryInput).execute();
         }
     }
 
@@ -85,7 +126,19 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Bot Reply: " + botReply);
             showTextView(botReply, BOT);
         } else {
-            Log.d(TAG,"Bot Reply: Null");
+            Log.d(TAG, "Bot Reply: Null");
+            showTextView("There was some communication issue. Please Try again!", BOT);
+        }
+    }
+
+    public void callbackV2(DetectIntentResponse response) {
+        if (response != null) {
+            // process aiResponse here
+            String botReply = response.getQueryResult().getFulfillmentText();
+            Log.d(TAG, "V2 Bot Reply: " + botReply);
+            showTextView(botReply, BOT);
+        } else {
+            Log.d(TAG, "Bot Reply: Null");
             showTextView("There was some communication issue. Please Try again!", BOT);
         }
     }
