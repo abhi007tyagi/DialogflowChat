@@ -3,6 +3,7 @@ package com.tyagiabhinav.dialogflowchat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -13,9 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
@@ -25,7 +24,6 @@ import com.google.cloud.dialogflow.v2beta1.SessionsClient;
 import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
 import com.google.cloud.dialogflow.v2beta1.TextInput;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -65,10 +63,24 @@ public class MainActivity extends AppCompatActivity {
         scrollview.post(() -> scrollview.fullScroll(ScrollView.FOCUS_DOWN));
 
         chatLayout = findViewById(R.id.chatLayout);
-        queryEditText = findViewById(R.id.queryEditText);
 
         ImageView sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setOnClickListener(this::sendMessage);
+
+        queryEditText = findViewById(R.id.queryEditText);
+        queryEditText.setOnKeyListener((view, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                    case KeyEvent.KEYCODE_ENTER:
+                        sendMessage(sendBtn);
+                        return true;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        });
 
         // Android client
 //        initChatbot();
