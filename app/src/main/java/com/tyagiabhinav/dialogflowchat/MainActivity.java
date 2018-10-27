@@ -90,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initChatbot() {
-        final AIConfiguration config = new AIConfiguration("<Client Access Code>",
+        final AIConfiguration config = new AIConfiguration(BuildConfig.ClientAccessToken,
                 AIConfiguration.SupportedLanguages.English,
                 AIConfiguration.RecognitionEngine.System);
         aiDataService = new AIDataService(this, config);
-        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid); // helps to create new session whenever app restarts
+        customAIServiceContext = AIServiceContextBuilder.buildFromSessionId(uuid);// helps to create new session whenever app restarts
         aiRequest = new AIRequest();
     }
 

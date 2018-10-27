@@ -15,6 +15,14 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "ClientAccessToken", CLIENT_ACCESS_TOKEN
+            resValue 'string', "ClientAccessToken", CLIENT_ACCESS_TOKEN
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "ClientAccessToken", CLIENT_ACCESS_TOKEN
+            resValue 'string', "ClientAccessToken", CLIENT_ACCESS_TOKEN
         }
     }
 
@@ -43,5 +51,6 @@ dependencies {
 
     // Java V2
     implementation 'com.google.cloud:google-cloud-dialogflow:0.67.0-alpha'
-    implementation 'io.grpc:grpc-okhttp:1.15.1' // for Remote Procedure Call to avoid "No functional channel service provider found" error while creating SessionsClient
+    // for Remote Procedure Call to avoid "No functional channel service provider found" error while creating SessionsClient
+    implementation 'io.grpc:grpc-okhttp:1.15.1'
 }
