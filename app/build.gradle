@@ -45,12 +45,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    // Dialogflow SDK dependencies
+    // Dialogflow SDK dependencies for older V1 --- recommend not to use this
     implementation 'ai.api:sdk:2.0.7@aar'
     implementation 'ai.api:libai:1.6.12'
 
     // Java V2
-    implementation 'com.google.cloud:google-cloud-dialogflow:0.67.0-alpha'
+    implementation 'com.google.cloud:google-cloud-dialogflow:1.0.0'
     // for Remote Procedure Call to avoid "No functional channel service provider found" error while creating SessionsClient
-    implementation 'io.grpc:grpc-okhttp:1.15.1'
+    implementation 'io.grpc:grpc-okhttp:1.28.1'
 }

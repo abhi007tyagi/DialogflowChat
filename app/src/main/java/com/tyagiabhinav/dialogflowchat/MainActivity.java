@@ -17,12 +17,18 @@ import android.widget.Toast;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
-import com.google.cloud.dialogflow.v2beta1.QueryInput;
-import com.google.cloud.dialogflow.v2beta1.SessionName;
-import com.google.cloud.dialogflow.v2beta1.SessionsClient;
-import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-import com.google.cloud.dialogflow.v2beta1.TextInput;
+import com.google.cloud.dialogflow.v2.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2.QueryInput;
+import com.google.cloud.dialogflow.v2.SessionName;
+import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.cloud.dialogflow.v2.SessionsSettings;
+import com.google.cloud.dialogflow.v2.TextInput;
+//import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+//import com.google.cloud.dialogflow.v2beta1.QueryInput;
+//import com.google.cloud.dialogflow.v2beta1.SessionName;
+//import com.google.cloud.dialogflow.v2beta1.SessionsClient;
+//import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
+//import com.google.cloud.dialogflow.v2beta1.TextInput;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout chatLayout;
     private EditText queryEditText;
 
-    // Android client
+    // Android client for older V1 --- recommend not to use this
     private AIRequest aiRequest;
     private AIDataService aiDataService;
     private AIServiceContext customAIServiceContext;
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Android client
+        // Android client for older V1 --- recommend not to use this
 //        initChatbot();
 
         // Java V2
@@ -120,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             showTextView(msg, USER);
             queryEditText.setText("");
-            // Android client
+            // Android client for older V1 --- recommend not to use this
 //            aiRequest.setQuery(msg);
 //            RequestTask requestTask = new RequestTask(MainActivity.this, aiDataService, customAIServiceContext);
 //            requestTask.execute(aiRequest);
