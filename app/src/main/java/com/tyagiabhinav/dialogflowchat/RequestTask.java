@@ -9,6 +9,7 @@ import ai.api.android.AIDataService;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 
+// Android client for older V1 --- recommend not to use this
 public class RequestTask  extends AsyncTask<AIRequest, Void, AIResponse> {
 
     Activity activity;

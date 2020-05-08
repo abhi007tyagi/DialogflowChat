@@ -23,16 +23,11 @@ import com.google.cloud.dialogflow.v2.SessionName;
 import com.google.cloud.dialogflow.v2.SessionsClient;
 import com.google.cloud.dialogflow.v2.SessionsSettings;
 import com.google.cloud.dialogflow.v2.TextInput;
-//import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
-//import com.google.cloud.dialogflow.v2beta1.QueryInput;
-//import com.google.cloud.dialogflow.v2beta1.SessionName;
-//import com.google.cloud.dialogflow.v2beta1.SessionsClient;
-//import com.google.cloud.dialogflow.v2beta1.SessionsSettings;
-//import com.google.cloud.dialogflow.v2beta1.TextInput;
 
 import java.io.InputStream;
 import java.util.UUID;
 
+// Android client for older V1 --- recommend not to use this
 import ai.api.AIServiceContext;
 import ai.api.AIServiceContextBuilder;
 import ai.api.android.AIConfiguration;
@@ -95,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         initV2Chatbot();
     }
 
+    // Android client for older V1 --- recommend not to use this
     private void initChatbot() {
         final AIConfiguration config = new AIConfiguration(BuildConfig.ClientAccessToken,
                 AIConfiguration.SupportedLanguages.English,
@@ -137,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Android client for older V1 --- recommend not to use this
     public void callback(AIResponse aiResponse) {
         if (aiResponse != null) {
             // process aiResponse here

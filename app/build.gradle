@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.tyagiabhinav.dialogflowchat"
@@ -13,7 +14,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "ClientAccessToken", CLIENT_ACCESS_TOKEN
             resValue 'string', "ClientAccessToken", CLIENT_ACCESS_TOKEN
@@ -24,6 +25,13 @@ android {
             buildConfigField 'String', "ClientAccessToken", CLIENT_ACCESS_TOKEN
             resValue 'string', "ClientAccessToken", CLIENT_ACCESS_TOKEN
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 
     compileOptions {
@@ -50,7 +58,7 @@ dependencies {
     implementation 'ai.api:libai:1.6.12'
 
     // Java V2
-    implementation 'com.google.cloud:google-cloud-dialogflow:1.0.0'
+    implementation 'com.google.cloud:google-cloud-dialogflow:2.0.0'
     // for Remote Procedure Call to avoid "No functional channel service provider found" error while creating SessionsClient
-    implementation 'io.grpc:grpc-okhttp:1.28.1'
+    implementation 'io.grpc:grpc-okhttp:1.29.0'
 }
